@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khmer & Sanskrit Font Selector</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+</head>
+<body>
+	<!-- Navigation Bar -->
+    <nav>
+        <div class="nav-brand">វចនានុក្រមខ្មែរបុរាណ</div>
+        <ul class="nav-links">
+            <li><a href="#">ទំព័រដើម</a></li>
+            <li><a href="#">អំពីខ្ញុំ</a></li>
+            <li><a href="#">ទំនាក់ទំនង</a></li>
+        </ul>
+    </nav>
+	
+    <div class="container">
+             
+        <div class="font-selectors">
+            <div class="font-option active" onclick="changeFont(this, 'khmer-font1')"> ខ្មែរទំនើប</div>
+			<div class="font-option" onclick="changeFont(this, 'khmer-font2')">មុនអង្គរ</div>
+            <div class="font-option" onclick="changeFont(this, 'khmer-font3')">អង្គរ១</div>
+            <div class="font-option" onclick="changeFont(this, 'khmer-font4')">អង្គរ៣</div>
+            <div class="font-option" onclick="changeFont(this, 'khmer-font5')">អង្គរ៥</div>
+
+        </div>
+        
+        <input type="text" id="searchInput" class="search-box" placeholder="ស្វែងរក / Search..." onkeyup="filterList()">
+        
+        <div class="list-container">
+            <div class="list-box" id="listBox"></div>
+            <div id="descriptionBox" class="description-box">
+                <p style="color: #666;">សូមជ្រើសរើសធាតុណាមួយ / Please select an item</p>
+            </div>
+        </div>
+    </div>
+	
+	<!-- ទិន្នន័យវចនានុក្រម -->
+
+    <script>
+        const items = [
+            { 
+                name: "ភាសាខ្មែរ", 
+                description: "ភាសាខ្មែរគឺជាភាសាជាតិនៃប្រទេសកម្ពុជា។",
+                latin: "khmaɛː",
+                devanagari: "ख्मेर भाषा",
+				ref: "K.303",
+            },
+
+            { 
+                name: "សំស្ក្រឹត", 
+                description: "ភាសាសំស្ក្រឹតគឺជាភាសាបុរាណរបស់ឥណ្ឌាដែលមានឥទ្ធិពលលើភាសាខ្មែរ។",
+                latin: "Sanskrit",
+                devanagari: "संस्कृतम्"
+            },
+			
+			
+			
+			
+			
+			// បន្ថែមពាក្យ​ខាងលើ​
+			{ 
+                name: "មូត៌ិ", 
+                description: "ភាសាសំស្ក្រឹតគឺជាភាសាបុរាណរបស់ឥណ្ឌាដែលមានឥទ្ធិពលលើភាសាខ្មែរ។",
+                latin: "Sanskrit",
+                devanagari: "संस्कृतम्"
+            }
+        ];
+
+        let currentFont = 'khmer-font1';
+        const listBox = document.getElementById('listBox');
+        const descriptionBox = document.getElementById('descriptionBox');
+
+        function populateList(filter = '') {
+            listBox.innerHTML = '';
+            const lowerFilter = filter.toLowerCase();
+
+            const filteredItems = items.filter(item => {
+                const searchStr = `${item.name} ${item.description} ${item.latin || ''} ${item.devanagari || ''}${item.ref || ''}`.toLowerCase();
+                return searchStr.includes(lowerFilter);
+            });
+            
+            filteredItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = `list-item ${currentFont}`;
+                div.textContent = (currentFont === 'sanskrit-font' && item.devanagari) ? item.devanagari : item.name;
+                
+                div.onclick = () => {
+                    descriptionBox.innerHTML = `
+                        <h3>${item.name}</h3>
+                        <p class="latin-text"><em>${item.latin || ''}</em></p>
+                        <p class="sanskrit-font" style="font-size: 1.2em;">${item.devanagari || ''}</p>
+                        <hr>
+                        <p>${item.description}</p>
+						<p class="ref"><em>${item.ref || ''}</em></p>
+				
+                    `;
+                    document.querySelectorAll('.list-item').forEach(el => el.style.backgroundColor = '');
+                    div.style.backgroundColor = '#e0f7fa';
+                    
+                    // Optional: Smoothly scroll down to description layout on small screens
+                    if (window.innerWidth <= 768) {
+                        descriptionBox.scrollIntoView({ behavior: 'smooth' });
+                    }
+                };
+                listBox.appendChild(div);
+            });
+        }
+
+        function changeFont(element, fontClass) {
+            currentFont = fontClass;
+            document.querySelectorAll('.font-option').forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            
+            const currentSearch = document.getElementById('searchInput').value;
+            populateList(currentSearch);
+        }
+
+        function filterList() {
+            const searchTerm = document.getElementById('searchInput').value;
+            populateList(searchTerm);
+        }
+
+        window.onload = () => populateList();
+    </script>
+
+	<center>
+		<div class="button-group">
+		  <a href="keyboard.html" class="btn btn-primary">ក្ដារចុចខ្មែរបុរាណ</a>
+		  <a href="#secondary" class="btn btn-secondary">Secondary Action</a>
+		  <a href="#outline" class="btn btn-outline">Outlined Link</a>
+		</div>
+	</center>
+
+    <!-- Footer -->
+    <footer>
+
+        <p>&copy; 2026 រក្សាសិទ្ធិគ្រប់យ៉ាងដោយវចនានុក្រមខ្មែរបុរាណ</p>
+    </footer>
+
+</body>
+</html>

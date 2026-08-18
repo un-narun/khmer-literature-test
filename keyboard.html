@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khmer Angkor Responsive Keyboard Pro</title>
+
+    <style>
+        /* =========================================================
+           ១. ទាញយក Font ពី Local Folder "fonts/" ដោយប្រើ @font-face
+           ========================================================= */
+		@font-face {
+            font-family: 'Khmer Mondulkiri';
+            src: url('./fonts/Mondulkiri-R.ttf') format('truetype');
+        }	
+
+        @font-face {
+            font-family: '!Narun-Pre Angkor';
+            src: url('./fonts/!Narun-Pre Angkor.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: '!Narun-Angkor 1';
+            src: url('./fonts/!Narun-Angkor 1.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: '!Narun-Angkor 3';
+            src: url('./fonts/!Narun-Angkor 3.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: '!Narun-Angkor 5';
+            src: url('./fonts/!Narun-Angkor 5.ttf') format('truetype');
+        }
+
+        /* Variables */
+        :root {
+            --primary-bg: #f0f4f8;
+            --kb-container: #2c3e50;
+            --kb-accent: #89cff0;
+            --key-white: #ffffff;
+            --key-special: #cfd8dc;
+            --key-active: #3498db;
+            --text-dark: #333;
+            /* Font ដើម */
+            --khmer-font: 'Khmer Mondulkiri', 'Kantumruy Pro', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Khmer Mondulkiri', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        header { text-align: center; margin: 10px 0; }
+        header h2 { font-size: 1.5rem; color: #1a2a3a; }
+
+        /* Toolbar Section */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            align-items: center;
+        }
+
+        .font-box {
+            flex: 2;
+            min-width: 250px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .font-box select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .btn-group {
+            flex: 1;
+            display: flex;
+            gap: 8px;
+            min-width: 180px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            transition: opacity 0.2s;
+			font-family: 'Khmer Mondulkiri', sans-serif;
+			
+        }
+
+        .btn-copy { background-color: #27ae60; }
+        .btn-clear { background-color: #e74c3c; }
+        .btn:hover { opacity: 0.9; }
+
+        /* Textarea Output */
+        #output {
+            width: 100%;
+            height: 140px;
+            font-size: 24px;
+            padding: 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 12px;
+            outline: none;
+            resize: none;
+            font-family: var(--khmer-font);
+            background: white;
+        }
+
+        /* Keyboard Layout */
+        .keyboard-area {
+            background-color: var(--kb-accent);
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            user-select: none;
+            width: 100%;
+        }
+
+        .kb-info {
+            display: flex;
+            justify-content: space-between;
+            background: var(--kb-container);
+            color: white;
+            padding: 6px 12px;
+            margin: -8px -8px 8px -8px;
+            border-radius: 10px 10px 0 0;
+            font-size: 12px;
+        }
+
+        .row {
+            display: flex;
+            width: 100%;
+            gap: 0.4%;
+            margin-bottom: 5px;
+        }
+
+        .key {
+            background: var(--key-white);
+            flex: 1;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 2px 0 #95a5a6;
+            font-size: 1.2rem;
+            font-family: var(--khmer-font);
+            position: relative;
+            transition: all 0.05s;
+        }
+
+        .key.special { background: var(--key-special); font-size: 0.8rem; font-family: sans-serif; }
+        .key.backspace { flex: 1.5; }
+        .key.tab { flex: 1.2; }
+        .key.caps { flex: 1.4; }
+        .key.enter { flex: 1.6; }
+        .key.shift { flex: 2.1; }
+        .key.space { flex: 7; font-size: 0.9rem; font-family: sans-serif; color: #7f8c8d; }
+        
+        .key.active-mod { background: var(--key-active) !important; color: white; }
+
+        .key.pressing {
+            transform: translateY(2px);
+            box-shadow: 0 0 0 transparent;
+            background-color: #dff9fb;
+            animation: shake 0.1s linear;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            50% { transform: translate(-1px, -1px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        /* Label សម្រាប់បង្ហាញអក្សរ Latin នៅជ្រុងខាងឆ្វេងលើ */
+        .latin-char {
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: #2c3e50;
+            font-family: sans-serif;
+        }
+
+        /* Hint Char (Shift) នៅជ្រុងខាងស្តាំលើ */
+        .hint-char {
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            font-size: 0.6rem;
+            color: #888;
+        }
+
+        @media (max-width: 600px) {
+            .key { height: 42px; font-size: 1rem; }
+            .hint-char, .latin-char { font-size: 0.5rem; }
+            .kb-info span:first-child { display: none; }
+            #output { font-size: 20px; height: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <h2>ក្ដារចុចខ្មែរ​បុរាណ​ | អ៊ុន ណារុន</h2>
+        </header>
+
+        <div class="toolbar">
+            <div class="font-box">
+                <label for="fontSelector">ជ្រើសរើស Font:</label>
+                <select id="fontSelector">
+                    <option value="Khmer Mondulkiri">Khmer Mondulkiri</option>
+                    <option value="!Narun-Pre Angkor">!Narun-Pre Angkor</option>
+                    <option value="!Narun-Angkor 1">!Narun-Angkor 1</option>
+                    <option value="!Narun-Angkor 3">!Narun-Angkor 3</option>
+                    <option value="!Narun-Angkor 5">!Narun-Angkor 5</option>
+                </select>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-copy" onclick="copyResult()">ចម្លង</button>
+                <button class="btn btn-clear" onclick="clearResult()">សម្អាត</button>
+            </div>
+        </div>
+
+        <textarea id="output" placeholder="Type here..."></textarea>
+
+        <div class="keyboard-area">
+            <div class="kb-info">
+                <span>Standard NiDA Layout</span>
+                <span id="layer-text">Normal Layer</span>
+            </div>
+            <div id="kb-grid"></div>
+        </div>
+    </div>
+
+<script>
+    const output = document.getElementById('output');
+    const fontSelector = document.getElementById('fontSelector');
+    const layerText = document.getElementById('layer-text');
+    let isShift = false;
+    let isAlt = false;
+
+    // ការដូរ Font តាមការជ្រើសរើសចេញពី Dropdown
+    fontSelector.addEventListener('change', () => {
+        const fontName = fontSelector.value;
+        document.documentElement.style.setProperty('--khmer-font', `'${fontName}', sans-serif`);
+    });
+
+    function copyResult() {
+        output.select();
+        document.execCommand('copy');
+        alert("បានចម្លងអត្ថបទរួចរាល់!");
+    }
+
+    function clearResult() {
+        if(confirm("តើអ្នកចង់សម្អាតអត្ថបទមែនទេ?")) output.value = "";
+    }
+
+    /* =========================================================
+       ២. អនុគមន៍ស្វ័យកែតម្រូវតាមក្បួន Khmer Angkor / Unicode Rules
+       ========================================================= */
+    function autoCorrectKhmerText(text) {
+        let res = text;
+
+        // ១. ស្វ័យកែតម្រូវតួអក្សរវាយច្រឡំ
+        res = res.replace(/\u179A\u179B/g, '\u17AB'); // រ + ញ -> ឫ
+        res = res.replace(/\u17AB\u17BB/g, '\u17AC'); // ឫ + ុ -> ឬ
+        res = res.replace(/\u17A7\u17B7/g, '\u17B1'); // ឧ + ិ -> ឱ
+        res = res.replace(/\u17A7\u17CC/g, '\u17B1'); // ឧ + ៌ -> ឱ
+        res = res.replace(/\u17A7\u17CD/g, '\u17B1'); // ឧ + ៍ -> ឱ
+        res = res.replace(/\u17AA\u1799/g, '\u17B2'); // ឪ + យ -> ឱ្យ
+        res = res.replace(/\u17B3\u1799/g, '\u17B2'); // ឳ + យ -> ឱ្យ
+        res = res.replace(/\u17A5\u17B6/g, '\u1789'); // ឥ + ា -> ញ
+        res = res.replace(/\u17AD\u17B6/g, '\u1789'); // ឭ + ា -> ញ
+        res = res.replace(/\u17AE\u17B6/g, '\u1789'); // ឮ + ា -> ញ
+
+        // ២. ស្រៈ ោ [U+17C4] និង ស្រៈ ើ [U+17BE]
+        res = res.replace(/\u17B6\u17C1/g, '\u17C4'); // ា + េ -> ោ
+        res = res.replace(/\u17C1\u17B6/g, '\u17C4'); // េ + ា -> ោ
+        res = res.replace(/\u17C1\u17B8/g, '\u17BE'); // េ + ី -> ើ
+
+        // ៣. ស្រៈមាននិគ្គហិត [U+17C6]
+        res = res.replace(/\u17C6\u17BB/g, '\u17BB\u17C6'); // ំ + ុ -> ុ + ំ
+        res = res.replace(/\u17C6\u17B6/g, '\u17B6\u17C6'); // ំ + ា -> ា + ំ
+
+        // ៤. ជើង + ស្រៈ (រុញស្រៈទៅក្រោយជើងព្យញ្ជនៈ)
+        res = res.replace(/([\u17B6-\u17C5])(\u17D2[\u1780-\u17A2])/g, '$2$1');
+
+        // ៥. ជើង + ត្រ [U+17D2][U+179A] (រុញជើង ្រ ទៅក្រោយជើងព្យញ្ជនៈមួយទៀត)
+        res = res.replace(/(\u17D2\u179A)(\u17D2[\u1780-\u1799\u179B-\u17A2])/g, '$2$1');
+
+        // ៦. ជើង + វណ្ណយុត្តិប្តូរមូលលេខ (រុញវណ្ណយុត្តិប្តូរមូលលេខទៅក្រោយជើង)
+        res = res.replace(/([\u17C9\u17CA])(\u17D2[\u1780-\u17A2])/g, '$2$1');
+
+        // ៧. វណ្ណយុត្តិប្តូរមូលលេខ + ស្រៈ (រុញវណ្ណយុត្តិទៅមុខស្រៈ)
+        res = res.replace(/([\u17B6-\u17C5])([\u17C9\u17CA])/g, '$2$1');
+
+        // ៨. ស្វ័យកែតម្រូវជើង ដ [U+178A] និង ជើង ត [U+178F] តាមក្បួនប្រកប
+        res = res.replace(/\u178E\u17D2\u178F/g, '\u178E\u17D2\u178A'); // ណ + ជើង ត -> ណ + ជើង ដ
+        res = res.replace(/\u1793\u17D2\u178A/g, '\u1793\u17D2\u178F'); // ន + ជើង ដ -> ន + ជើង ត
+
+        return res;
+    }
+
+    /* Map សម្រាប់បម្លែង Key Code ទៅជាអក្សរ Latin/Symbol ដើមនៅលើ Key */
+    const latinMap = {
+        'Backquote': '`', 'Digit1': '1', 'Digit2': '2', 'Digit3': '3', 'Digit4': '4', 'Digit5': '5', 'Digit6': '6', 'Digit7': '7', 'Digit8': '8', 'Digit9': '9', 'Digit0': '0', 'Minus': '-', 'Equal': '=',
+        'KeyQ': 'Q', 'KeyW': 'W', 'KeyE': 'E', 'KeyR': 'R', 'KeyT': 'T', 'KeyY': 'Y', 'KeyU': 'U', 'KeyI': 'I', 'KeyO': 'O', 'KeyP': 'P', 'BracketLeft': '[', 'BracketRight': ']', 'Backslash': '\\',
+        'KeyA': 'A', 'KeyS': 'S', 'KeyD': 'D', 'KeyF': 'F', 'KeyG': 'G', 'KeyH': 'H', 'KeyJ': 'J', 'KeyK': 'K', 'KeyL': 'L', 'Semicolon': ';', 'Quote': "'",
+        'KeyZ': 'Z', 'KeyX': 'X', 'KeyC': 'C', 'KeyV': 'V', 'KeyB': 'B', 'KeyN': 'N', 'KeyM': 'M', 'Comma': ',', 'Period': '.', 'Slash': '/'
+    };
+
+    const maps = {
+        normal: {
+            'Backquote': '«', 'Digit1': '១', 'Digit2': '២', 'Digit3': '៣', 'Digit4': '៤', 'Digit5': '៥', 'Digit6': '៦', 'Digit7': '៧', 'Digit8': '៨', 'Digit9': '៩', 'Digit0': '០', 'Minus': 'ឥ', 'Equal': 'ឲ',
+            'KeyQ': 'ឆ', 'KeyW': 'ឹ', 'KeyE': 'េ', 'KeyR': 'រ', 'KeyT': 'ត', 'KeyY': 'យ', 'KeyU': 'ុ', 'KeyI': 'ិ', 'KeyO': 'ោ', 'KeyP': 'ផ', 'BracketLeft': 'ៀ', 'BracketRight': 'ឪ', 'Backslash': 'ឮ',
+            'KeyA': 'ា', 'KeyS': 'ស', 'KeyD': 'ដ', 'KeyF': 'ថ', 'KeyG': 'ង', 'KeyH': 'ហ', 'KeyJ': '្', 'KeyK': 'ក', 'KeyL': 'ល', 'Semicolon': 'ើ', 'Quote': '់',
+            'KeyZ': 'ឋ', 'KeyX': 'ខ', 'KeyC': 'ច', 'KeyV': 'វ', 'KeyB': 'ប', 'KeyN': 'ន', 'KeyM': 'ម', 'Comma': 'ុំ', 'Period': '។', 'Slash': '៊'
+        },
+        shift: {
+            'Backquote': '»', 'Digit1': '!', 'Digit2': 'ៗ', 'Digit3': '"', 'Digit4': '៛', 'Digit5': '%', 'Digit6': '៍', 'Digit7': '័', 'Digit8': '៏', 'Digit9': '(', 'Digit0': ')', 'Minus': '៌', 'Equal': '=',
+            'KeyQ': 'ឈ', 'KeyW': 'ឺ', 'KeyE': 'ែ', 'KeyR': 'ឬ', 'KeyT': 'ទ', 'KeyY': 'ួ', 'KeyU': 'ូ', 'KeyI': 'ី', 'KeyO': 'ៅ', 'KeyP': 'ភ', 'BracketLeft': 'ឿ', 'BracketRight': 'ឧ', 'Backslash': 'ឭ',
+            'KeyA': 'ាំ', 'KeyS': 'ៃ', 'KeyD': 'ឌ', 'KeyF': 'ធ', 'KeyG': 'អ', 'KeyH': 'ះ', 'KeyJ': 'ញ', 'KeyK': 'គ', 'KeyL': 'ឡ', 'Semicolon': 'ោះ', 'Quote': '៉',
+            'KeyZ': 'ឍ', 'KeyX': 'ឃ', 'KeyC': 'ជ', 'KeyV': 'េះ', 'KeyB': 'ព', 'KeyN': 'ណ', 'KeyM': 'ំ', 'Comma': 'ុះ', 'Period': '៕', 'Slash': '?'
+        },
+        alt: {
+            'Digit1': '\u200C', 'Digit2': '@', 'Digit3': '៑', 'Digit4': '$', 'Digit5': '€', 'Digit6': '៙', 'Digit7': '៚', 'Digit8': '*', 'Digit9': '{', 'Digit0': '}', 'Minus': '≈', 'Equal': '៎',
+            'KeyE': 'ឯ', 'KeyR': 'ឫ', 'KeyT': 'ឨ', 'KeyU': '[', 'KeyI': 'ឦ', 'KeyO': 'ឱ', 'KeyP': 'ឰ', 'BracketLeft': 'ឩ', 'BracketRight': 'ឳ',
+            'KeyA': '+', 'KeyS': '-', 'KeyD': 'x', 'KeyF': '÷', 'KeyG': ':', 'KeyH': '‘', 'KeyJ': '’', 'KeyK': 'ឝ', 'KeyL': '៘', 'Semicolon': '៖', 'Quote': 'ៈ',
+            'KeyZ': '<', 'KeyX': '>', 'KeyC': '#', 'KeyV': '&', 'KeyB': 'ឞ', 'KeyN': ';', 'KeyM': '៓', 'Comma': ',', 'Period': '.', 'Slash': '/'
+        },
+        altShift: {
+            'Digit1': '៱', 'Digit2': '៲', 'Digit3': '៳', 'Digit4': '៴', 'Digit5': '៵', 'Digit6': '៶', 'Digit7': '៷', 'Digit8': '៸', 'Digit9': '៹', 'Digit0': '៰',
+            'KeyQ': '᧠', 'KeyW': '᧡', 'KeyE': '᧢', 'KeyR': '᧣', 'KeyT': '᧤', 'KeyY': '᧥', 'KeyU': '᧦', 'KeyI': '᧧', 'KeyO': '᧨', 'KeyP': '᧩', 'BracketLeft': '᧪', 'BracketRight': '᧫',
+            'KeyA': '᧬', 'KeyS': '᧭', 'KeyD': '᧮', 'KeyF': '᧯', 'KeyG': '᧰', 'KeyH': '᧱', 'KeyJ': '᧲', 'KeyK': '᧳', 'KeyL': '᧴', 'Semicolon': '᧵','Quote': '᧶',
+            'KeyZ': '᧷', 'KeyX': '᧸', 'KeyC': '᧹', 'KeyV': '᧺', 'KeyB': '᧻', 'KeyN': '᧼', 'KeyM': '᧽', 'Comma': '᧾', 'Period': '᧿'
+        }
+    };
+
+    const structure = [
+        ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace'],
+        ['Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash'],
+        ['Caps', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter'],
+        ['ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ShiftRight'],
+        ['CtrlLeft', 'AltLeft', 'Space', 'AltRight', 'CtrlRight']
+    ];
+
+    function renderKeyboard() {
+        const grid = document.getElementById('kb-grid');
+        grid.innerHTML = '';
+
+        let currentMap;
+        if (isAlt && isShift) { currentMap = maps.altShift; layerText.innerText = "AltGr + Shift Layer"; }
+        else if (isAlt) { currentMap = maps.alt; layerText.innerText = "AltGr Layer"; }
+        else if (isShift) { currentMap = maps.shift; layerText.innerText = "Shift Layer"; }
+        else { currentMap = maps.normal; layerText.innerText = "Normal Layer"; }
+
+        structure.forEach(rowKeys => {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'row';
+            rowKeys.forEach(code => {
+                const key = document.createElement('div');
+                key.className = 'key ' + code.toLowerCase();
+                key.id = code;
+
+                const char = currentMap[code] || '';
+                
+                if (code === 'Backspace') key.innerHTML = '⌫';
+                else if (code === 'Tab') key.innerHTML = '↹';
+                else if (code === 'Enter') key.innerHTML = '↵';
+                else if (code === 'Space') key.innerHTML = 'Space / ZWSP';
+                else if (code.includes('Shift')) { key.innerHTML = '⇧'; if(isShift) key.classList.add('active-mod'); }
+                else if (code === 'AltRight') { key.innerHTML = 'AltGr'; if(isAlt) key.classList.add('active-mod'); }
+                else if (code === 'Caps') key.innerHTML = 'Caps';
+                else {
+                    key.innerText = char;
+
+                    // បញ្ចូលអក្សរ Latin នៅជ្រុងខាងឆ្វេងលើនៃ Key
+                    if (latinMap[code]) {
+                        const latinSpan = document.createElement('span');
+                        latinSpan.className = 'latin-char';
+                        latinSpan.innerText = latinMap[code];
+                        key.appendChild(latinSpan);
+                    }
+
+                    // បង្ហាញ Hint Char (Shift) នៅជ្រុងខាងស្តាំលើ (នៅពេលមិនទាន់ចុច Shift)
+                    if (!isShift && !isAlt && maps.shift[code]) {
+                        const hint = document.createElement('span');
+                        hint.className = 'hint-char';
+                        hint.innerText = maps.shift[code];
+                        key.appendChild(hint);
+                    }
+                }
+
+                if (['Backspace', 'Tab', 'Enter', 'Caps', 'ShiftLeft', 'ShiftRight', 'AltRight', 'Space'].includes(code)) {
+                    key.classList.add('special');
+                }
+
+                key.onmousedown = (e) => { e.preventDefault(); handleAction(code); };
+                rowDiv.appendChild(key);
+            });
+            grid.appendChild(rowDiv);
+        });
+    }
+
+    function handleAction(code) {
+        const el = document.getElementById(code);
+        if(el) { el.classList.add('pressing'); setTimeout(() => el.classList.remove('pressing'), 100); }
+
+        if (code.includes('Shift')) { isShift = !isShift; renderKeyboard(); return; }
+        if (code === 'AltRight') { isAlt = !isAlt; renderKeyboard(); return; }
+
+        const start = output.selectionStart;
+        const end = output.selectionEnd;
+
+        if (code === 'Backspace') {
+            if (start === end) {
+                output.value = output.value.substring(0, start - 1) + output.value.substring(end);
+                output.selectionStart = output.selectionEnd = start - 1;
+            } else {
+                output.value = output.value.substring(0, start) + output.value.substring(end);
+                output.selectionStart = output.selectionEnd = start;
+            }
+        } 
+        else if (code === 'Enter') {
+            output.value = output.value.substring(0, start) + "\n" + output.value.substring(end);
+            output.selectionStart = output.selectionEnd = start + 1;
+        }
+        else if (code === 'Space') {
+            const spaceChar = isShift ? '\u0020' : '\u200B';
+            output.value = output.value.substring(0, start) + spaceChar + output.value.substring(end);
+            output.selectionStart = output.selectionEnd = start + 1;
+        }
+        else {
+            const activeMap = (isAlt && isShift) ? maps.altShift : (isAlt ? maps.alt : (isShift ? maps.shift : maps.normal));
+            const typed = activeMap[code] || '';
+            if (typed) {
+                output.value = output.value.substring(0, start) + typed + output.value.substring(end);
+                output.selectionStart = output.selectionEnd = start + typed.length;
+                if (isShift && !isAlt) { isShift = false; renderKeyboard(); }
+            }
+        }
+
+        // ដំណើរការស្វ័យកែតម្រូវ
+        const currentPos = output.selectionStart;
+        output.value = autoCorrectKhmerText(output.value);
+        output.selectionStart = output.selectionEnd = currentPos;
+
+        output.focus();
+    }
+
+    // Physical Keyboard Sync
+    window.addEventListener('keydown', (e) => {
+        if (e.code.includes('Shift')) { isShift = true; renderKeyboard(); }
+        if (e.code === 'AltRight') { isAlt = true; renderKeyboard(); e.preventDefault(); }
+        
+        if (structure.flat().includes(e.code)) {
+            if (maps.normal[e.code] || ['Space', 'Enter', 'Backspace'].includes(e.code)) {
+                e.preventDefault();
+                handleAction(e.code);
+            }
+        }
+    });
+
+    window.addEventListener('keyup', (e) => {
+        if (e.code.includes('Shift')) { isShift = false; renderKeyboard(); }
+        if (e.code === 'AltRight') { isAlt = false; renderKeyboard(); }
+    });
+
+    renderKeyboard();
+</script>
+</body>
+</html>
